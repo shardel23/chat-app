@@ -13,10 +13,6 @@ const app = express();
 app.use(cors());
 const httpServer = createServer();
 
-app.get("/", (req, res) => {
-  res.send("Well done!");
-});
-
 const server = app.listen(3001, () => {
   console.log("The application is listening on port 3001!");
 });
@@ -34,8 +30,9 @@ const io = new Server<
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
-  socket.on("hello", () => {
-    console.log("Got hello");
+  console.log("a user connected -", socket.id);
+  socket.on("message", (message: string) => {
+    console.log("Got message from ", socket.id, ":");
+    console.log(message);
   });
 });

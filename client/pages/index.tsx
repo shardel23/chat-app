@@ -1,19 +1,26 @@
+import { Button } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { ServerToClientEvents, ClientToServerEvents } from "../socket/types";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
+  const [socket, setSocket] =
+    useState<Socket<ServerToClientEvents, ClientToServerEvents>>();
+
   useEffect(() => {
     console.log("Creating socket");
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       "http://localhost:3001"
     );
-    console.log("Sending hello");
-    socket.emit("hello");
-    console.log("Sent");
+
+    setSocket(socket);
+
+    socket.on("message", (from: string, message: string) => {
+      console.log("Got message", Date.now());
+    });
   }, []);
 
   return (
@@ -28,6 +35,16 @@ export default function Home() {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+
+        <Button
+          colorScheme="blue"
+          mt="8"
+          onClick={() => {
+            socket?.emit("message", "Hello");
+          }}
+        >
+          Send 'Hello' Message
+        </Button>
 
         <p className={styles.description}>
           Get started by editing{" "}

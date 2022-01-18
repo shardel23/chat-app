@@ -1,11 +1,10 @@
 export interface ServerToClientEvents {
   noArg: () => void;
-  basicEmit: (a: number, b: string, c: string) => void;
-  withAck: (d: string, callback: (e: number) => void) => void;
+  message: (from: string, message: string) => void;
 }
 
 export interface ClientToServerEvents {
-  hello: () => void;
+  message: (message: string) => void;
 }
 
 export interface InterServerEvents {
