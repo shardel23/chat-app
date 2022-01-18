@@ -1,14 +1,21 @@
-import { Button } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, Spacer } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import Chatbox from "../components/Chatbox";
 import { ServerToClientEvents, ClientToServerEvents } from "../socket/types";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>();
+  const [message, setMessage] = useState<string>("");
+  const [messages, setMessages] = useState<Array<string>>([
+    "Hi!",
+    "Welcome to this chat app!",
+    "Type your messages below",
+  ]);
 
   useEffect(() => {
     console.log("Creating socket");
@@ -20,6 +27,7 @@ export default function Home() {
 
     socket.on("message", (from: string, message: string) => {
       console.log("Got message", Date.now());
+      setMessages((messages) => [...messages, from + ": " + message]);
     });
   }, []);
 
@@ -36,50 +44,31 @@ export default function Home() {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <Button
-          colorScheme="blue"
-          mt="8"
-          onClick={() => {
-            socket?.emit("message", "Hello");
-          }}
-        >
-          Send 'Hello' Message
-        </Button>
+        <Chatbox messages={messages} />
 
-        <p className={styles.description}>
-          Get started by editing{" "}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <Flex mt="8">
+          <Box p="4">
+            <Input
+              placeholder="Message"
+              value={message}
+              onChange={(event) => {
+                setMessage(event.target.value);
+              }}
+            />
+          </Box>
+          <Spacer />
+          <Box p="4">
+            <Button
+              colorScheme="blue"
+              onClick={() => {
+                socket?.emit("message", message);
+                setMessage("");
+              }}
+            >
+              Send Message
+            </Button>
+          </Box>
+        </Flex>
       </main>
 
       <footer className={styles.footer}>

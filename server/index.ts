@@ -34,5 +34,6 @@ io.on("connection", (socket) => {
   socket.on("message", (message: string) => {
     console.log("Got message from ", socket.id, ":");
     console.log(message);
+    io.emit("message", socket.id, message);
   });
 });
