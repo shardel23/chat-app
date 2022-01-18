@@ -8,7 +8,7 @@ type Props = {
 
 function Chatbox(props: Props) {
   return (
-    <Container mt="16px" border="solid 1px" borderRadius="4px" h="600px">
+    <Container mt="16px" border="solid 1px" borderRadius="4px" h="500px">
       {props.messages.map((message) => (
         <Message key={message} content={message} />
       ))}

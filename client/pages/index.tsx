@@ -4,13 +4,13 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import Chatbox from "../components/Chatbox";
+import Composer from "../components/Composer";
 import { ServerToClientEvents, ClientToServerEvents } from "../socket/types";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>();
-  const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<Array<string>>([
     "Hi!",
     "Welcome to this chat app!",
@@ -43,32 +43,8 @@ export default function Home() {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-
         <Chatbox messages={messages} />
-
-        <Flex mt="8">
-          <Box p="4">
-            <Input
-              placeholder="Message"
-              value={message}
-              onChange={(event) => {
-                setMessage(event.target.value);
-              }}
-            />
-          </Box>
-          <Spacer />
-          <Box p="4">
-            <Button
-              colorScheme="blue"
-              onClick={() => {
-                socket?.emit("message", message);
-                setMessage("");
-              }}
-            >
-              Send Message
-            </Button>
-          </Box>
-        </Flex>
+        <Composer socket={socket} />
       </main>
 
       <footer className={styles.footer}>
