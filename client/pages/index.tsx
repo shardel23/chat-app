@@ -1,4 +1,3 @@
-import { Box, Button, Flex, Input, Spacer } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -22,7 +21,6 @@ export default function Home() {
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       "http://localhost:3001"
     );
-
     setSocket(socket);
 
     socket.on("message", (from: string, message: string) => {
@@ -30,6 +28,10 @@ export default function Home() {
       setMessages((messages) => [...messages, from + ": " + message]);
     });
   }, []);
+
+  if (socket == undefined) {
+    return <div> Connecting... </div>;
+  }
 
   return (
     <div className={styles.container}>
@@ -43,7 +45,7 @@ export default function Home() {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-        <Chatbox messages={messages} />
+        <Chatbox socket={socket} messages={messages} />
         <Composer socket={socket} />
       </main>
 

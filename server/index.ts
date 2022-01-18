@@ -31,9 +31,20 @@ const io = new Server<
 
 io.on("connection", (socket) => {
   console.log("a user connected -", socket.id);
+
   socket.on("message", (message: string) => {
     console.log("Got message from ", socket.id, ":");
     console.log(message);
     io.emit("message", socket.id, message);
+  });
+
+  socket.on("startedTyping", () => {
+    console.log(socket.id, "started typing");
+    io.emit("someoneIsTyping");
+  });
+
+  socket.on("stoppedTyping", () => {
+    console.log(socket.id, "stopped typing");
+    io.emit("nobodyIsTyping");
   });
 });

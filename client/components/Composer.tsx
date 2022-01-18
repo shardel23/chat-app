@@ -9,6 +9,7 @@ type Props = {
 
 function Composer(props: Props) {
   const [message, setMessage] = useState<string>("");
+  const [isTyping, setIsTyping] = useState<boolean>(false);
 
   return (
     <Flex mt="8">
@@ -17,7 +18,16 @@ function Composer(props: Props) {
           placeholder="Message"
           value={message}
           onChange={(event) => {
-            setMessage(event.target.value);
+            const newMessage = event.target.value;
+            setMessage(newMessage);
+            if (!isTyping && newMessage !== "") {
+              setIsTyping(true);
+              props.socket?.emit("startedTyping");
+            }
+            if (isTyping && newMessage === "") {
+              setIsTyping(false);
+              props.socket?.emit("stoppedTyping");
+            }
           }}
         />
       </Box>
