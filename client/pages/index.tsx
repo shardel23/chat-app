@@ -4,7 +4,10 @@ import { io, Socket } from "socket.io-client";
 import Chatbox from "../components/Chatbox";
 import Composer from "../components/Composer";
 import Footer from "../components/Footer";
-import { ServerToClientEvents, ClientToServerEvents } from "../socket/types";
+import {
+  ServerToClientEvents,
+  ClientToServerEvents,
+} from "../../server/socket/types";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {

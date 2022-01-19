@@ -1,7 +1,10 @@
 import { Flex, Box, Input, Spacer, Button } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { Socket } from "socket.io-client";
-import { ServerToClientEvents, ClientToServerEvents } from "../socket/types";
+import {
+  ServerToClientEvents,
+  ClientToServerEvents,
+} from "../../server/socket/types";
 
 type Props = {
   socket: Socket<ServerToClientEvents, ClientToServerEvents> | undefined;

@@ -1,7 +1,10 @@
 import { Container } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
-import { ServerToClientEvents, ClientToServerEvents } from "../socket/types";
+import {
+  ServerToClientEvents,
+  ClientToServerEvents,
+} from "../../server/socket/types";
 import Message from "./Message";
 
 type Props = {
